@@ -1,14 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import ItemTodo from "./components/ItemTodo";
-import { useState, useRef, KeyboardEvent } from "react";
+import { useRef } from "react";
+import { useLocalStorage } from "./lib/useLocalStorage";
 
 export default function Home() {
-  const [todoItem, setTodoItem] = useState([]);
-  const [onProgresItem, setOnProgresItem] = useState([]);
-  const [doneItem, setDoneItem] = useState([]);
-
+  const [onProgresItem, setOnProgresItem] = useLocalStorage("onProgresItem", []);
+  const [doneItem, setDoneItem] = useLocalStorage("doneItem", []);
   const todoRef = useRef(null);
 
   const handleDone = (item) => {
@@ -17,12 +15,12 @@ export default function Home() {
   };
 
   const handleOnProgressDelete = (item) => {
-    setOnProgresItem(onProgresItem.filter(a => a !== item))
-  }
+    setOnProgresItem(onProgresItem.filter((a) => a !== item));
+  };
 
   const handleDoneDelete = (item) => {
-    setDoneItem(doneItem.filter(a => a !== item))
-  }
+    setDoneItem(doneItem.filter((a) => a !== item));
+  };
 
   const handleInput = (event) => {
     const value = todoRef.current?.value;
@@ -46,8 +44,7 @@ export default function Home() {
       todoRef.current.value = "";
     }
   };
-  console.log(onProgresItem);
-  console.log(doneItem);
+
   return (
     <main className="min-h-screen bg-indigo-100 p-10 ">
       <h1 className="text-center p-10 text-3xl font-bold">TODO List</h1>
@@ -62,7 +59,13 @@ export default function Home() {
           <h3 className="font-semibold py-5">On Progress</h3>
           <div className="flex flex-col ">
             {onProgresItem.map((item, index) => {
-              return <ItemTodo key={index} todo={item} number={index} done={handleDone} isDone={false} deleteBtn={handleOnProgressDelete}/>;
+              return <ItemTodo
+                key={index}
+                todo={item}
+                number={index}
+                done={handleDone}
+                isDone={false}
+                deleteBtn={handleOnProgressDelete} />;
             })}
           </div>
         </div>
@@ -70,7 +73,13 @@ export default function Home() {
           <h3 className="font-semibold py-5">Done</h3>
           <div className="flex flex-col ">
             {doneItem.map((item, index) => {
-              return <ItemTodo key={index} todo={item} number={index} done={handleDone} isDone={true} deleteBtn={handleDoneDelete}/>;
+              return <ItemTodo
+                key={index}
+                todo={item}
+                number={index}
+                done={handleDone}
+                isDone={true}
+                deleteBtn={handleDoneDelete} />;
             })}
           </div>
         </div>
